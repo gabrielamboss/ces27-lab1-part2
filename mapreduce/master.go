@@ -33,6 +33,7 @@ type Master struct {
 	// ADD EXTRA PROPERTIES HERE //
 	///////////////////////////////
 	// Fault Tolerance
+
 }
 
 type Operation struct {
@@ -80,6 +81,14 @@ func (master *Master) handleFailingWorkers() {
 	/////////////////////////
 	// YOUR CODE GOES HERE //
 	/////////////////////////
+
+	for failedWorker := range master.failedWorkerChan {
+		master.workersMutex.Lock()
+		log.Println("Worker %d failed. Removing from master list.", failedWorker.id)
+		delete(master.workers, failedWorker.id)
+		master.workersMutex.Unlock()
+	}
+
 }
 
 // Handle a single connection until it's done, then closes it.
